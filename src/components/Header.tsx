@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Sparkles, Music } from 'lucide-react';
 
 const Header: React.FC = () => {
   return (
@@ -13,12 +12,6 @@ const Header: React.FC = () => {
             alt="CLUBKIT Logo" 
             className="h-20 animate-float glow-box"
           />
-          <div className="absolute -top-4 -right-4">
-            <Sparkles className="h-8 w-8 text-yellow-300 animate-pulse" />
-          </div>
-          <div className="absolute -bottom-4 -left-4">
-            <Music className="h-8 w-8 text-cyan-400 animate-pulse" />
-          </div>
         </div>
         
         <div className="text-center">
