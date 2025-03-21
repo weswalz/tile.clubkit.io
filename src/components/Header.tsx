@@ -16,9 +16,6 @@ const Header: React.FC = () => {
         
         <div className="text-center">
           <div className="flex flex-col items-center space-y-3">
-            <span className="chip animate-fade-in z-10" style={{ animationDelay: '0.2s' }}>
-              LED WALL FORMATTER
-            </span>
             <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight animate-slide-up glow-text bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500" style={{ animationDelay: '0.3s' }}>
               LED PHOTO TILER
             </h1>
