@@ -23,7 +23,8 @@ export const calculateTiling = (
   tilesCount: number, 
   scale: number, 
   finalImageWidth: number, 
-  finalImageHeight: number 
+  finalImageHeight: number,
+  verticalOffset: number 
 } => {
   // First, scale the image to match the canvas height
   const scale = canvasHeight / imageHeight;
@@ -49,11 +50,15 @@ export const calculateTiling = (
   // Final number of tiles with the adjusted scale
   const tilesCount = Math.ceil(canvasWidth / finalImageWidth);
   
+  // Calculate vertical centering offset
+  const verticalOffset = (canvasHeight - finalImageHeight) / 2;
+  
   return {
     tilesCount,
     scale: finalScale,
     finalImageWidth,
-    finalImageHeight
+    finalImageHeight,
+    verticalOffset
   };
 };
 
@@ -74,7 +79,7 @@ export const createTiledImage = (
     }
     
     // Calculate tiling
-    const { tilesCount, finalImageWidth, finalImageHeight } = calculateTiling(
+    const { tilesCount, finalImageWidth, finalImageHeight, verticalOffset } = calculateTiling(
       img.width,
       img.height,
       canvasWidth,
@@ -84,12 +89,12 @@ export const createTiledImage = (
     // Clear the canvas
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     
-    // Draw the tiled images
+    // Draw the tiled images with vertical centering
     for (let i = 0; i < tilesCount; i++) {
       ctx.drawImage(
         img,
         i * finalImageWidth,
-        0,
+        verticalOffset, // Apply vertical centering
         finalImageWidth,
         finalImageHeight
       );
@@ -111,7 +116,8 @@ export const drawPreview = (
   img: HTMLImageElement,
   canvas: HTMLCanvasElement,
   targetWidth: number,
-  targetHeight: number
+  targetHeight: number,
+  verticalCenter: boolean = false
 ): void => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -121,7 +127,7 @@ export const drawPreview = (
   canvas.height = targetHeight;
   
   // Calculate tiling
-  const { tilesCount, finalImageWidth, finalImageHeight } = calculateTiling(
+  const { tilesCount, finalImageWidth, finalImageHeight, verticalOffset } = calculateTiling(
     img.width,
     img.height,
     targetWidth,
@@ -146,7 +152,7 @@ export const drawPreview = (
     ctx.drawImage(
       img,
       i * finalImageWidth,
-      0,
+      verticalCenter ? verticalOffset : 0, // Apply vertical centering if requested
       finalImageWidth,
       finalImageHeight
     );

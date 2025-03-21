@@ -7,9 +7,15 @@ interface ProcessingCanvasProps {
   imageFile: File | null;
   width: number;
   height: number;
+  previewScale?: number; // New prop for controlling preview size
 }
 
-const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({ imageFile, width, height }) => {
+const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({ 
+  imageFile, 
+  width, 
+  height,
+  previewScale = 1 // Default to full size if not specified
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadedImage, setLoadedImage] = useState<HTMLImageElement | null>(null);
@@ -22,14 +28,14 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({ imageFile, width, h
       
       const containerWidth = canvasRef.current.parentElement?.clientWidth || width;
       const maxPreviewWidth = Math.min(containerWidth, 1000);
-      const ratio = maxPreviewWidth / width;
+      const ratio = maxPreviewWidth / width * previewScale; // Apply previewScale to the ratio
       setPreviewRatio(ratio);
     };
 
     calculatePreviewSize();
     window.addEventListener('resize', calculatePreviewSize);
     return () => window.removeEventListener('resize', calculatePreviewSize);
-  }, [width]);
+  }, [width, previewScale]);
   
   // Load and process image when file or dimensions change
   useEffect(() => {
@@ -46,8 +52,8 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({ imageFile, width, h
           const previewWidth = width * previewRatio;
           const previewHeight = height * previewRatio;
           
-          // Draw the preview
-          drawPreview(img, canvasRef.current, previewWidth, previewHeight);
+          // Draw the preview with vertical centering
+          drawPreview(img, canvasRef.current, previewWidth, previewHeight, true); // Added vertical centering
         }
       } catch (error) {
         console.error('Error processing image:', error);
@@ -67,8 +73,8 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({ imageFile, width, h
     const previewWidth = width * previewRatio;
     const previewHeight = height * previewRatio;
     
-    // Draw the preview
-    drawPreview(loadedImage, canvasRef.current, previewWidth, previewHeight);
+    // Draw the preview with vertical centering
+    drawPreview(loadedImage, canvasRef.current, previewWidth, previewHeight, true); // Added vertical centering
   }, [width, height, loadedImage, previewRatio]);
   
   if (!imageFile) {
@@ -123,6 +129,10 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({ imageFile, width, h
         <div className="chip bg-black/70 backdrop-blur-sm text-white">
           {width} × {height} px
         </div>
+      </div>
+      
+      <div className="mt-2 text-center text-xs text-white/50">
+        Preview at {Math.round(previewScale * 100)}% of actual size
       </div>
     </div>
   );

@@ -35,8 +35,8 @@ const Index: React.FC = () => {
       <Header />
       
       <main className="container max-w-4xl mx-auto px-4 py-8 space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-6">
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <PhotoUploader onPhotoSelected={handlePhotoSelected} />
             <DimensionControls 
               defaultWidth={DEFAULT_WIDTH}
@@ -48,7 +48,8 @@ const Index: React.FC = () => {
           <ProcessingCanvas 
             imageFile={selectedImage} 
             width={canvasWidth} 
-            height={canvasHeight} 
+            height={canvasHeight}
+            previewScale={0.2} // Set preview scale to 20%
           />
         </div>
         
