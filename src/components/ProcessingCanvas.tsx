@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { drawPreview, loadImage } from '../utils/imageProcessing';
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon, Sparkles } from 'lucide-react';
 
 interface ProcessingCanvasProps {
   imageFile: File | null;
@@ -73,10 +73,21 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({ imageFile, width, h
   
   if (!imageFile) {
     return (
-      <div className="preview-container flex items-center justify-center h-[300px] animate-fade-in" style={{ animationDelay: '0.7s' }}>
-        <div className="flex flex-col items-center text-muted-foreground">
-          <ImageIcon className="h-16 w-16 mb-4 opacity-20" />
-          <p>Image preview will appear here</p>
+      <div className="preview-container flex items-center justify-center h-[300px] animate-fade-in relative overflow-hidden" style={{ animationDelay: '0.7s' }}>
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-400"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600"></div>
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-600 via-pink-500 to-cyan-400"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-pink-500 to-purple-600"></div>
+        
+        <div className="flex flex-col items-center text-white/60">
+          <div className="relative">
+            <ImageIcon className="h-20 w-20 mb-4 opacity-30" />
+            <div className="absolute -top-1 -right-1">
+              <Sparkles className="h-6 w-6 text-cyan-400/70" />
+            </div>
+          </div>
+          <p className="text-lg">Drop an image to preview</p>
+          <p className="text-sm mt-2 text-white/40">Your tiled result will appear here</p>
         </div>
       </div>
     );
@@ -85,9 +96,14 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({ imageFile, width, h
   return (
     <div className="relative animate-fade-in" style={{ animationDelay: '0.7s' }}>
       <div className="preview-container overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-400"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600"></div>
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-600 via-pink-500 to-cyan-400"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-pink-500 to-purple-600"></div>
+        
         {isLoading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-10">
-            <div className="loading-spinner h-8 w-8 border-2 border-primary"></div>
+          <div className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-10">
+            <div className="loading-spinner h-12 w-12 border-4"></div>
           </div>
         ) : null}
         
@@ -103,9 +119,9 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({ imageFile, width, h
         />
       </div>
       
-      <div className="absolute bottom-3 right-3">
-        <div className="chip bg-background/80 backdrop-blur-sm text-foreground">
-          {width} × {height}
+      <div className="absolute bottom-4 right-4 z-10">
+        <div className="chip bg-black/70 backdrop-blur-sm text-white">
+          {width} × {height} px
         </div>
       </div>
     </div>
