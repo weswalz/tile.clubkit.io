@@ -17,6 +17,7 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
   previewScale = 1 // Default to full size if not specified
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadedImage, setLoadedImage] = useState<HTMLImageElement | null>(null);
   const [previewRatio, setPreviewRatio] = useState(1);
@@ -24,11 +25,10 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
   // Handle responsive canvas scaling
   useEffect(() => {
     const calculatePreviewSize = () => {
-      if (!canvasRef.current) return;
+      if (!containerRef.current) return;
       
-      const containerWidth = canvasRef.current.parentElement?.clientWidth || width;
-      const maxPreviewWidth = Math.min(containerWidth, 1000);
-      const ratio = maxPreviewWidth / width * previewScale; // Apply previewScale to the ratio
+      const containerWidth = containerRef.current.clientWidth || width;
+      const ratio = containerWidth / width * previewScale; // Apply previewScale to the ratio
       setPreviewRatio(ratio);
     };
 
@@ -79,7 +79,7 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
   
   if (!imageFile) {
     return (
-      <div className="preview-container flex items-center justify-center h-[300px] animate-fade-in relative overflow-hidden" style={{ animationDelay: '0.7s' }}>
+      <div ref={containerRef} className="preview-container flex items-center justify-center h-[300px] animate-fade-in relative overflow-hidden" style={{ animationDelay: '0.7s' }}>
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-400"></div>
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600"></div>
         <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-600 via-pink-500 to-cyan-400"></div>
@@ -100,7 +100,7 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
   }
   
   return (
-    <div className="relative animate-fade-in" style={{ animationDelay: '0.7s' }}>
+    <div ref={containerRef} className="relative animate-fade-in w-full" style={{ animationDelay: '0.7s' }}>
       <div className="preview-container overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-400"></div>
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-600"></div>
@@ -115,12 +115,10 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
         
         <canvas 
           ref={canvasRef} 
-          className="w-full max-w-full"
+          className="w-full"
           style={{ 
             height: `${height * previewRatio}px`, 
-            maxHeight: '500px',
-            width: `${width * previewRatio}px`,
-            maxWidth: '100%'
+            maxHeight: '500px'
           }}
         />
       </div>

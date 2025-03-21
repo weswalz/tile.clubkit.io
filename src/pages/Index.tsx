@@ -45,12 +45,14 @@ const Index: React.FC = () => {
             />
           </div>
           
-          <ProcessingCanvas 
-            imageFile={selectedImage} 
-            width={canvasWidth} 
-            height={canvasHeight}
-            previewScale={0.2} // Set preview scale to 20%
-          />
+          <div className="w-full max-w-full">
+            <ProcessingCanvas 
+              imageFile={selectedImage} 
+              width={canvasWidth} 
+              height={canvasHeight}
+              previewScale={0.2} // Set preview scale to 20%
+            />
+          </div>
         </div>
         
         <div className="pt-4">
