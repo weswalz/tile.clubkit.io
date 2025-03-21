@@ -28,14 +28,15 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
       if (!containerRef.current) return;
       
       const containerWidth = containerRef.current.clientWidth || width;
-      const ratio = containerWidth / width * previewScale; // Apply previewScale to the ratio
+      // Maintain aspect ratio while fitting container width
+      const ratio = containerWidth / width;
       setPreviewRatio(ratio);
     };
 
     calculatePreviewSize();
     window.addEventListener('resize', calculatePreviewSize);
     return () => window.removeEventListener('resize', calculatePreviewSize);
-  }, [width, previewScale]);
+  }, [width]);
   
   // Load and process image when file or dimensions change
   useEffect(() => {
@@ -53,7 +54,7 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
           const previewHeight = height * previewRatio;
           
           // Draw the preview with vertical centering
-          drawPreview(img, canvasRef.current, previewWidth, previewHeight, true); // Added vertical centering
+          drawPreview(img, canvasRef.current, previewWidth, previewHeight, true);
         }
       } catch (error) {
         console.error('Error processing image:', error);
@@ -74,7 +75,7 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
     const previewHeight = height * previewRatio;
     
     // Draw the preview with vertical centering
-    drawPreview(loadedImage, canvasRef.current, previewWidth, previewHeight, true); // Added vertical centering
+    drawPreview(loadedImage, canvasRef.current, previewWidth, previewHeight, true);
   }, [width, height, loadedImage, previewRatio]);
   
   if (!imageFile) {
@@ -117,7 +118,7 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
           ref={canvasRef} 
           className="w-full"
           style={{ 
-            height: `${height * previewRatio}px`, 
+            height: `${height * previewRatio}px`,
             maxHeight: '500px'
           }}
         />
@@ -130,7 +131,7 @@ const ProcessingCanvas: React.FC<ProcessingCanvasProps> = ({
       </div>
       
       <div className="mt-2 text-center text-xs text-white/50">
-        Preview at {Math.round(previewScale * 100)}% of actual size
+        Preview at {Math.round(previewRatio * 100)}% of actual width
       </div>
     </div>
   );

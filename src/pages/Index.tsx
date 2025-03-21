@@ -50,7 +50,6 @@ const Index: React.FC = () => {
               imageFile={selectedImage} 
               width={canvasWidth} 
               height={canvasHeight}
-              previewScale={0.2} // Set preview scale to 20%
             />
           </div>
         </div>
